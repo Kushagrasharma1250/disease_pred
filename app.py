@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify, render_template
 import os
 import pickle
+import sklearn
 
 app = Flask(__name__)
 
@@ -12,7 +13,7 @@ parkinsons_model = pickle.load(open(f'{working_dir}/parkinsons_model.sav', 'rb')
 
 @app.route('/')
 def home():
-    return "Health Assistant API is running!"
+   return render_template('index.html')
 
 @app.route('/predict/diabetes', methods=['POST'])
 def predict_diabetes():

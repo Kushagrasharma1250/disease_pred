@@ -3,8 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <title>Health Assistant</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+<style>/* =============== GLOBAL STYLES =============== */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #d7f3ff, #e4f9f5);
+    color: #333;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+/* =============== HEADER =============== */
+header {
+    background: #0077b6;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2.2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: #caf0f8;
+}
+
+/* =============== SECTIONS =============== */
+section {
+    background: white;
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+section h2 {
+    text-align: center;
+    color: #0077b6;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+/* =============== FORMS =============== */
+form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+input {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    font-size: 0.95em;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+    border-color: #0077b6;
+    box-shadow: 0 0 5px rgba(0, 119, 182, 0.3);
+}
+
+button {
+    grid-column: span 2;
+    padding: 12px 0;
+    border: none;
+    background: #0077b6;
+    color: white;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background: #023e8a;
+    transform: scale(1.02);
+}
+
+/* =============== RESULTS =============== */
+.result {
+    text-align: center;
+    font-weight: bold;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 1.1em;
+    border-radius: 8px;
+}
+
+/* Green for healthy / negative results */
+.result:contains("not") {
+    color: #2b9348;
+}
+
+/* Red for disease / positive results */
+.result:contains("has"), 
+.result:contains("diabetic"), 
+.result:contains("disease") {
+    color: #d00000;
+}
+
+/* =============== RESPONSIVE DESIGN =============== */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.6em;
+    }
+
+    section {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    button {
+        grid-column: span 1;
+    }
+}
+</style>
 <body>
     <header>
         <h1>🧑‍⚕️ Health Assistant</h1>
@@ -17,68 +157,108 @@
         </nav>
     </header>
 
+    <!-- Diabetes -->
     <section id="diabetes">
         <h2>Diabetes Prediction</h2>
-        <form>
-            <input type="text" placeholder="Number of Pregnancies">
-            <input type="text" placeholder="Glucose Level">
-            <input type="text" placeholder="Blood Pressure">
-            <input type="text" placeholder="Skin Thickness">
-            <input type="text" placeholder="Insulin Level">
-            <input type="text" placeholder="BMI">
-            <input type="text" placeholder="Diabetes Pedigree Function">
-            <input type="text" placeholder="Age">
+        <form id="diabetesForm">
+            <input type="number" name="Pregnancies" placeholder="Number of Pregnancies" required>
+            <input type="number" name="Glucose" placeholder="Glucose Level" required>
+            <input type="number" name="BloodPressure" placeholder="Blood Pressure" required>
+            <input type="number" name="SkinThickness" placeholder="Skin Thickness" required>
+            <input type="number" name="Insulin" placeholder="Insulin Level" required>
+            <input type="number" name="BMI" placeholder="BMI" step="0.1" required>
+            <input type="number" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function" step="0.001" required>
+            <input type="number" name="Age" placeholder="Age" required>
             <button type="submit">Diabetes Test Result</button>
         </form>
+        <p id="diabetesResult" class="result"></p>
     </section>
 
+    <!-- Heart -->
     <section id="heart">
         <h2>Heart Disease Prediction</h2>
-        <form>
-            <input type="text" placeholder="Age">
-            <input type="text" placeholder="Sex">
-            <input type="text" placeholder="Chest Pain Type">
-            <input type="text" placeholder="Resting Blood Pressure">
-            <input type="text" placeholder="Cholesterol">
-            <input type="text" placeholder="Fasting Blood Sugar">
-            <input type="text" placeholder="Resting ECG">
-            <input type="text" placeholder="Max Heart Rate">
-            <input type="text" placeholder="Exercise Induced Angina">
-            <input type="text" placeholder="ST Depression">
-            <input type="text" placeholder="Slope">
-            <input type="text" placeholder="Major Vessels">
-            <input type="text" placeholder="Thal">
+        <form id="heartForm">
+            <input type="number" name="age" placeholder="Age" required>
+            <input type="number" name="sex" placeholder="Sex (1=Male, 0=Female)" required>
+            <input type="number" name="cp" placeholder="Chest Pain Type" required>
+            <input type="number" name="trestbps" placeholder="Resting Blood Pressure" required>
+            <input type="number" name="chol" placeholder="Cholesterol" required>
+            <input type="number" name="fbs" placeholder="Fasting Blood Sugar" required>
+            <input type="number" name="restecg" placeholder="Resting ECG" required>
+            <input type="number" name="thalach" placeholder="Max Heart Rate" required>
+            <input type="number" name="exang" placeholder="Exercise Induced Angina" required>
+            <input type="number" name="oldpeak" placeholder="ST Depression" step="0.1" required>
+            <input type="number" name="slope" placeholder="Slope" required>
+            <input type="number" name="ca" placeholder="Major Vessels" required>
+            <input type="number" name="thal" placeholder="Thal" required>
             <button type="submit">Heart Disease Test Result</button>
         </form>
+        <p id="heartResult" class="result"></p>
     </section>
 
+    <!-- Parkinson's -->
     <section id="parkinsons">
         <h2>Parkinson's Prediction</h2>
-        <form>
-            <input type="text" placeholder="MDVP:Fo(Hz)">
-            <input type="text" placeholder="MDVP:Fhi(Hz)">
-            <input type="text" placeholder="MDVP:Flo(Hz)">
-            <input type="text" placeholder="MDVP:Jitter(%)">
-            <input type="text" placeholder="MDVP:Jitter(Abs)">
-            <input type="text" placeholder="MDVP:RAP">
-            <input type="text" placeholder="MDVP:PPQ">
-            <input type="text" placeholder="Jitter:DDP">
-            <input type="text" placeholder="MDVP:Shimmer">
-            <input type="text" placeholder="MDVP:Shimmer(dB)">
-            <input type="text" placeholder="Shimmer:APQ3">
-            <input type="text" placeholder="Shimmer:APQ5">
-            <input type="text" placeholder="MDVP:APQ">
-            <input type="text" placeholder="Shimmer:DDA">
-            <input type="text" placeholder="NHR">
-            <input type="text" placeholder="HNR">
-            <input type="text" placeholder="RPDE">
-            <input type="text" placeholder="DFA">
-            <input type="text" placeholder="Spread1">
-            <input type="text" placeholder="Spread2">
-            <input type="text" placeholder="D2">
-            <input type="text" placeholder="PPE">
+        <form id="parkinsonsForm">
+            <input type="number" name="fo" placeholder="MDVP:Fo(Hz)" required>
+            <input type="number" name="fhi" placeholder="MDVP:Fhi(Hz)" required>
+            <input type="number" name="flo" placeholder="MDVP:Flo(Hz)" required>
+            <input type="number" name="Jitter_percent" placeholder="MDVP:Jitter(%)" required>
+            <input type="number" name="Jitter_Abs" placeholder="MDVP:Jitter(Abs)" required>
+            <input type="number" name="RAP" placeholder="MDVP:RAP" required>
+            <input type="number" name="PPQ" placeholder="MDVP:PPQ" required>
+            <input type="number" name="DDP" placeholder="Jitter:DDP" required>
+            <input type="number" name="Shimmer" placeholder="MDVP:Shimmer" required>
+            <input type="number" name="Shimmer_dB" placeholder="MDVP:Shimmer(dB)" required>
+            <input type="number" name="APQ3" placeholder="Shimmer:APQ3" required>
+            <input type="number" name="APQ5" placeholder="Shimmer:APQ5" required>
+            <input type="number" name="APQ" placeholder="MDVP:APQ" required>
+            <input type="number" name="DDA" placeholder="Shimmer:DDA" required>
+            <input type="number" name="NHR" placeholder="NHR" required>
+            <input type="number" name="HNR" placeholder="HNR" required>
+            <input type="number" name="RPDE" placeholder="RPDE" required>
+            <input type="number" name="DFA" placeholder="DFA" required>
+            <input type="number" name="spread1" placeholder="Spread1" required>
+            <input type="number" name="spread2" placeholder="Spread2" required>
+            <input type="number" name="D2" placeholder="D2" required>
+            <input type="number" name="PPE" placeholder="PPE" required>
             <button type="submit">Parkinson's Test Result</button>
         </form>
+        <p id="parkinsonsResult" class="result"></p>
     </section>
+
+    <script>
+        // Helper function: Convert form data to JSON
+        function getFormData(form) {
+            const data = {};
+            new FormData(form).forEach((value, key) => {
+                data[key] = value;
+            });
+            return data;
+        }
+
+        // Generic function to handle predictions
+        function handlePrediction(formId, resultId, endpoint) {
+            const form = document.getElementById(formId);
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = getFormData(form);
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                document.getElementById(resultId).innerText = result.prediction;
+            });
+        }
+
+        // Attach listeners
+        handlePrediction('diabetesForm', 'diabetesResult', '/predict/diabetes');
+        handlePrediction('heartForm', 'heartResult', '/predict/heart');
+        handlePrediction('parkinsonsForm', 'parkinsonsResult', '/predict/parkinsons');
+    </script>
 </body>
 </html>
