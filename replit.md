@@ -21,9 +21,9 @@ This is a Flask-based web application that provides disease prediction using pre
 
 ## Technology Stack
 - **Backend**: Flask 3.1.2
-- **ML Framework**: scikit-learn 1.7.2
-- **Data Processing**: pandas, numpy
-- **Production Server**: gunicorn
+- **ML Framework**: scikit-learn 1.3.2
+- **Data Processing**: pandas 2.2.2, numpy 1.26.4
+- **Production Server**: gunicorn 23.0.0
 - **Python Version**: 3.11
 
 ## Features
@@ -50,14 +50,21 @@ Configured for Replit's autoscale deployment using:
 - `POST /predict/parkinsons` - Parkinson's disease prediction endpoint
 
 ## Notes
-- The ML models were trained with scikit-learn 1.0.2 but work with version 1.7.2 (with compatibility warnings)
+- **Important**: The ML models (*.sav files) were trained with scikit-learn 1.0.2 but the runtime uses version 1.3.2
+  - This triggers `InconsistentVersionWarning` on startup
+  - For production use, models should be retrained with the current version (1.3.2) using the included Jupyter notebooks
+  - The app is functional for testing/demonstration, but prediction accuracy is not guaranteed until models are retrained
 - All models use the SVC (Support Vector Classification) or Logistic Regression algorithms
 - Input validation is handled client-side and server-side
+- CSS is embedded in the HTML template for simplicity
 
 ## Recent Changes
 - **2025-11-09**: Initial Replit setup
   - Configured Flask app for Replit environment (0.0.0.0:5000)
   - Fixed requirements.txt encoding issue
+  - Updated scikit-learn to compatible version 1.3.2 (models trained on 1.0.2)
+  - Removed static CSS reference (CSS is embedded in HTML)
   - Set up workflow for Flask development server
-  - Configured gunicorn for production deployment
+  - Configured gunicorn for production deployment with autoscale
   - Added Python .gitignore
+  - Removed old gitignore file without dot prefix
